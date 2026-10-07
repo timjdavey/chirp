@@ -1,3 +1,4 @@
+"""Experiment: how long an Ed25519 public key and a 32-byte nonce are once base64-encoded."""
 import os
 import base64
 

@@ -1,3 +1,4 @@
+"""Experiments: play test chirps through the speakers to time them."""
 import secrets
 import string
 import time
@@ -66,8 +67,8 @@ def main():
     # Test 1: Simple data
     print("\n1. Creating chirp with simple data:")
     start_time = time.time()
-    call_valid_chirp("HUaNWob+9pyJ1LPOr".lower())
-    call_valid_chirp("QUFBQUMzTnphQzFsW".lower())
+    call_valid_chirp("0123456789abcdefg")
+    call_valid_chirp("hijklmnopqrstuv01")
     #call_valid_chirp("d41d8cd98f00b204e9800998ecf8427e")
     end_time = time.time()
     print(f"Audio playback took {end_time - start_time:.2f} seconds")
