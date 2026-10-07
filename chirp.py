@@ -1,26 +1,22 @@
 #!/usr/bin/env python
 """
-Chirp.io Encoder/Decoder
+Chirp audio modem: encode short codes as tones and decode them from the microphone.
+Based on a reverse-engineering of the Chirp.io protocol.
 """
-import os
 import sys
 import wave
 import time
 import string
 import pyaudio
 import reedsolo
-import requests
 import argparse
 import threading
-import webbrowser
 import numpy as np
 
 MIN_AMPLITUDE = 1000
 SAMPLE_RATE = 44100.0  # Hz
 SAMPLE_LENGTH = 5  # sec
 CHIRP_LENGTH = 53
-
-
 
 
 class Audio():
@@ -79,7 +75,7 @@ class Audio():
         chunk = wf.readframes(self.CHUNK)
         buf.extend(chunk)
 
-        while chunk != '':
+        while chunk:
             chunk = wf.readframes(self.CHUNK)
             buf.extend(chunk)
 
@@ -205,8 +201,8 @@ class Chirp():
         chirp_code = None
         datalen = len(data)
 
-        if data.argmax() < MIN_AMPLITUDE:
-            print(f"No chirp found, amplitude too low {data.argmax()} < {MIN_AMPLITUDE}")
+        if data.max() < MIN_AMPLITUDE:
+            print(f"No chirp found, amplitude too low {data.max()} < {MIN_AMPLITUDE}")
             return
 
         while s < datalen - self.CHIRP_SAMPLES:
@@ -286,12 +282,10 @@ class DecodeThread(threading.Thread):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Chirp.io Encoder/Decoder')
+    parser = argparse.ArgumentParser(description='Chirp audio encoder/decoder')
     parser.add_argument('-l', '--listen', action='store_true', default=False, help='listen out for a chirp')
     parser.add_argument('-i', '--internal', action='store_true', default=False, help='use internal error correction')
-    parser.add_argument('-u', '--url', help='chirp a url')
     parser.add_argument('-c', '--code', help='chirp a code')
-    parser.add_argument('-f', '--file', help='chirp a file, path to either a jpg, png or pdf')
     args = parser.parse_args()
 
     chirp = Chirp()
@@ -317,14 +311,7 @@ if __name__ == '__main__':
         print('Chirping code: %s' % args.code)
         audio.play(samples)
 
-    elif args.url:
-        code = chirp.get_code(args.url)
-        samples = chirp.encode(code, internal=args.internal)
-        print('Chirping url: %s' % args.url)
-        audio.play(samples)
-
     else:
-        print('No arguments specified!')
-        print('Exiting..')
+        parser.print_help()
 
     sys.exit(0)

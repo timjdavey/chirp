@@ -1,0 +1,13 @@
+[project]
+name = "chirp"
+version = "0.1.0"
+description = "Prototype: verify a caller over audio with a chirp-encoded challenge-response handshake"
+requires-python = ">=3.10"
+dependencies = [
+    "cryptography",
+    "numpy",
+    "pyaudio",
+]
+
+[tool.uv]
+package = false

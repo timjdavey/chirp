@@ -1,3 +1,4 @@
+"""Challenge-response handshake: Bob proves he holds a private key by signing Alice's nonce."""
 import os
 import hashlib
 from cryptography.hazmat.primitives import hashes, serialization
